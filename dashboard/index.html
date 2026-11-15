@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ground station</title>
+<style>
+body{font:14px/1.4 system-ui,sans-serif;margin:16px;max-width:1100px;color:#222;background:#fff}
+h1{font-size:18px;margin:0 0 12px}
+section{margin-bottom:16px}
+button{font:inherit;padding:4px 10px;margin:0 4px 4px 0;border:1px solid #999;border-radius:3px;background:#f4f4f4;cursor:pointer}
+input{font:inherit;width:80px;padding:3px 6px;border:1px solid #999;border-radius:3px}
+#data{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px 16px}
+#data div{border-bottom:1px solid #ddd;padding:2px 0}
+#data p{display:flex;justify-content:space-between;margin:0}
+#data span{color:#666}
+#data canvas{display:block;width:100%;height:28px}
+#chart{display:block;width:100%;height:240px;border:1px solid #ddd}
+#events{border-collapse:collapse;max-width:640px;width:100%}
+#events td{border-bottom:1px solid #ddd;padding:3px 8px}
+#events tr:first-child td{color:#666}
+.muted{color:#666}
+</style>
+</head>
+<body>
+<h1>Ground station</h1>
+
+<section>
+  <button onclick="connect()">Connect COM port</button>
+  <span id="status" class="muted">COM port: not connected</span> &middot;
+  <span id="link" class="muted">Rocket: no data</span>
+</section>
+
+<section>
+  <button onclick="arm()">Arm</button>
+  <button onclick="disarm()">Disarm</button>
+  <button onclick="send('TEST')">Test</button>
+  <button onclick="send('OPENNOSE')">Open nose</button>
+  <button onclick="send('WIFI_ON')">WiFi on</button>
+  <button onclick="send('WIFI_OFF')">WiFi off</button>
+  <button onclick="send('CX_ON')">Telemetry on</button>
+  <button onclick="send('CX_OFF')">Telemetry off</button>
+  <button onclick="send('ZERO')">Zero altitude</button>
+  <button onclick="send('ZERO_ACCEL')">Zero accel</button>
+  <button onclick="send('MAG_CAL')">Mag cal (turn 20 s)</button>
+  Deploy from <input id="apogee" type="number" value="1000" min="1"> m
+  <button onclick="send('APOGEE=' + apogee.value)">Set</button>
+</section>
+
+<section>
+  <button onclick="send('FREQ_MAIN')">Main channel</button>
+  <button onclick="send('FREQ_BACKUP')">Backup channel</button>
+  <button onclick="send('PWR_HIGH')">Power high</button>
+  <button onclick="send('PWR_LOW')">Power low</button>
+  <button onclick="saveAll()">Save all data</button>
+  <span id="last" class="muted">Last command: none</span>
+</section>
+
+<section>
+  Simulation (one pressure in Pa per line, 1 per second) <input id="simFile" type="file" accept=".csv,.txt">
+  <button onclick="simStart()">Run simulation</button>
+  <button onclick="simStop()">Stop simulation</button>
+  <span id="simState" class="muted">Simulation off</span>
+</section>
+
+<section><table id="events"><tr><td>Flight events appear here once the rocket is armed</td></tr></table></section>
+<section><canvas id="chart"></canvas></section>
+<section id="data"></section>
+<section id="logState" class="muted">Not logging</section>
+
+<script src="app.js"></script>
+</body>
+</html>
